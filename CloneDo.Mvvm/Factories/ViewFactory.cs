@@ -30,13 +30,8 @@ namespace CloneDo.Mvvm.Factories
 		/// <param name="viewModelType">View model type.</param>
 		public static Page CreatePage(Type viewModelType) {
 			Type viewType = map [viewModelType];
-			System.Diagnostics.Debug.WriteLine (viewModelType);
-			System.Diagnostics.Debug.WriteLine (viewType);
 
 			var page = (Page)Activator.CreateInstance(viewType);
-
-			System.Diagnostics.Debug.WriteLine ("Page created");
-
 			var viewModel = (BaseViewModel)Activator.CreateInstance (viewModelType);
 
 			// this is where the view and viewmodel are coupled

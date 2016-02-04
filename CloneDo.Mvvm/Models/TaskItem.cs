@@ -8,6 +8,9 @@ namespace CloneDoMvvm.Models
 		public TaskItem ()
 		{
 			Date = DateTime.Today;	// default date in database
+			Task = "";
+			Description = "";
+			Done = false;
 		}
 
 		[PrimaryKey, AutoIncrement]

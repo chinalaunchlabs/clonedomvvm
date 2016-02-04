@@ -2,15 +2,27 @@
 using CloneDoMvvm.Models;
 using System.Collections.ObjectModel;
 using CloneDo.Mvvm.Factories;
+using Xamarin.Forms;
+using System.Windows.Input;
+using System.Collections.Generic;
 
 namespace CloneDo.Mvvm.ViewModels
 {
 	public class TodoListViewModel : BaseViewModel
 	{
-		ObservableCollection<TaskCellViewModel> _todoList = new ObservableCollection<TaskCellViewModel>();
-		public ObservableCollection<TaskCellViewModel> TodoList {
+
+		public string AppName {
+			get { return "CloneDo"; }
+		}
+
+		private List<TaskCellViewModel> _todoList = new List<TaskCellViewModel> ();
+		/// <summary>
+		/// List of tasks to be done.
+		/// </summary>
+		/// <value>The todo list.</value>
+		public List<TaskCellViewModel> TodoList {
 			get { return _todoList; }
-			set {
+			private set {
 				if (_todoList == value)
 					return;
 				_todoList = value;
@@ -18,25 +30,107 @@ namespace CloneDo.Mvvm.ViewModels
 			}
 		}
 
-		public TodoListViewModel ()
-		{
-			// TODO: Clean this up later.
-			// Hardcoded values for testing.
-			App.Database.DeleteAllTasks();
-			App.Database.SaveTask (new TaskItem { Task="Buy apples", Description="", Done=true });
-			App.Database.SaveTask (new TaskItem { Task="Sell dem apples", Description="", Done=true });
-			App.Database.SaveTask (new TaskItem { Task="Roll over", Description="", Done=true });
-			App.Database.SaveTask (new TaskItem { Task="Cry", Description="", Done=true });
-			App.Database.SaveTask (new TaskItem { Task="Repeat last two tasks ad infinitum", Description="", Done=true });
-
-			var tasks = App.Database.GetTasksDone ();
-			foreach (TaskItem t in tasks) {
-				System.Diagnostics.Debug.WriteLine ("Adding {0} to list", t.Task);
-				_todoList.Add (new TaskCellViewModel (t)); 
+		private List<TaskCellViewModel> _doneList = new List<TaskCellViewModel>();
+		/// <summary>
+		/// List of tasks that have been accomplished.
+		/// </summary>
+		/// <value>The done list.</value>
+		public List<TaskCellViewModel> DoneList {
+			get { return _doneList; }
+			private set {
+				if (_doneList == value)
+					return;
+				_doneList = value;
+				OnPropertyChanged ();
 			}
 		}
+
+		private int _todoListHeight;
+		/// <summary>
+		/// Gets the height of the todo list.
+		/// </summary>
+		/// <value>The height of the todo list.</value>
+		public int TodoListHeight {
+			get { return _todoListHeight; }
+			private set {
+				_todoListHeight = value;
+			}
+		}
+
+		private int _doneListHeight;
+		/// <summary>
+		/// Gets the height of the done list.
+		/// </summary>
+		/// <value>The height of the done list.</value>
+		public int DoneListHeight {
+			get { return _doneListHeight; }
+			private set {
+				_doneListHeight = value;
+			}
+		}
+
+		public TodoListViewModel ()
+		{
+			
+			// Initialize
+			LoadTasks ();
+
+			// Commands
+			this.NewTaskCommand = new Command (() => {
+				System.Diagnostics.Debug.WriteLine("Making new task");
+				TaskItem newTask = new TaskItem();
+				TaskItemViewModel vm = new TaskItemViewModel(newTask);
+				Navigation.PushAsync(ViewFactory.CreatePage(vm));
+			});
+
+			this.ReloadCommand = new Command (() => {
+				LoadTasks();
+			});
+
+			// Messages
+			MessagingCenter.Subscribe<TaskItemViewModel, TaskItem> (this, "TaskAdded", (sender, task) => {
+				System.Diagnostics.Debug.WriteLine("Task '{0}' was saved", task.Task);
+				LoadTasks();
+			});
+
+			MessagingCenter.Subscribe<TaskItemViewModel, TaskItem> (this, "TaskDeleted", (sender, task) => {
+				System.Diagnostics.Debug.WriteLine("Task '{0}' was deleted", task.Task);
+				LoadTasks();
+			});
+
+			MessagingCenter.Subscribe<TaskCellViewModel, TaskItem> (this, "TaskSetDone", (sender, task) => {
+				System.Diagnostics.Debug.WriteLine("Task '{0}' doneness was set/unset", task.Task);
+				LoadTasks();
+			});
+
+			MessagingCenter.Subscribe<TaskCellViewModel, TaskItem> (this, "TaskTapped", (sender, task) => {
+				System.Diagnostics.Debug.WriteLine("Task '{0}' was tapped", task.Task);
+				TaskItemViewModel viewModel = new TaskItemViewModel (task);
+				Navigation.PushAsync (ViewFactory.CreatePage (viewModel));
+			});
+		}
 	
-		protected object _selectedItem;
+		/// <summary>
+		/// Populates the list with tasks from the database. Called to force a change in the UI.
+		/// </summary>
+		private void LoadTasks() {
+			var tasks = App.Database.GetTasksDone ();
+			List<TaskCellViewModel> doneCollection = new List<TaskCellViewModel> ();
+			foreach (TaskItem t in tasks) {
+				doneCollection.Add (new TaskCellViewModel (t)); 
+			}
+
+			tasks = App.Database.GetTasksDone (false);
+			List<TaskCellViewModel> todoCollection = new List<TaskCellViewModel> ();
+			todoCollection.Clear ();
+			foreach (TaskItem t in tasks) {
+				todoCollection.Add (new TaskCellViewModel (t)); 
+			}
+			TodoList = todoCollection;
+			TodoList.AddRange(doneCollection);
+		}
+
+		private object _selectedItem;
 		public object SelectedTaskItem {
 			get { return _selectedItem; }
 			set {
@@ -44,8 +138,6 @@ namespace CloneDo.Mvvm.ViewModels
 					return;
 
 				_selectedItem = value;
-				OnPropertyChanged ();
-
 				if (_selectedItem != null) {
 					System.Diagnostics.Debug.WriteLine ("Task '" + ((TaskCellViewModel)_selectedItem).TaskName + "' was selected.");
 
@@ -56,6 +148,17 @@ namespace CloneDo.Mvvm.ViewModels
 				
 				}
 			}
+		}
+
+		// Command interfaces
+		public ICommand NewTaskCommand {
+			get;
+			protected set;
+		}
+
+		public ICommand ReloadCommand {
+			get;
+			protected set;
 		}
 	
 	}

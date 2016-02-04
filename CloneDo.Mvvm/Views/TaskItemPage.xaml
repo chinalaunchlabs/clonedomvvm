@@ -1,5 +1,9 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="CloneDo.Mvvm.TaskItemPage">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+			 x:Class="CloneDo.Mvvm.TaskItemPage"
+			 xmlns:vm="clr-namespace:CloneDo.Mvvm.ViewModels;assembly=CloneDo.Mvvm"
+			 Title="{Binding Title}">
 	<ContentPage.Content>
 
 	<StackLayout>
@@ -15,10 +19,9 @@
 		<Label Text="Due Date:" />
 		<DatePicker Date="{Binding DueDate}" />
 
-		<Button Text="Save" />
-		<Button Text="Reset" />
-		<Button Text="Delete" />
-
+		<Button Text="Save" Command="{Binding SaveCommand}" IsEnabled="{Binding CanSave}" />
+		<Button Text="Reset" Command="{Binding ResetCommand}" />
+		<Button Text="Delete" Command="{Binding DeleteCommand}" IsEnabled="{Binding CanDelete}" />
 	</StackLayout>
 
 	</ContentPage.Content>

@@ -11,8 +11,13 @@ namespace CloneDo.Mvvm
 		public TodoListPage ()
 		{
 			InitializeComponent ();
-			listView.ItemTemplate = new DataTemplate (typeof(TaskCell));
-			listView.SetBinding (ListView.SelectedItemProperty, "SelectedTaskItem");
+			todoList.ItemTemplate = new DataTemplate (typeof(TaskCell));
+
+			// prevent list items from being selected
+			todoList.ItemSelected += (sender, e) => {
+				((ListView)sender).SelectedItem = null;
+			};
+//			todoList.SetBinding (ListView.SelectedItemProperty, "SelectedTaskItem");
 		}
 	}
 }

@@ -2,9 +2,61 @@
 <ViewCell xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="CloneDo.Mvvm.TaskCell">
 	<ViewCell.View>
 
-		<Label Text="{Binding TaskName}"
-				FontAttributes="Bold"
-				FontSize="Large" />
+	<StackLayout Orientation="Horizontal">
+
+		<!--left: 40 - because the parent layout was moved -20px -->
+		<StackLayout.Padding>
+			40, 0, 30, 0
+		</StackLayout.Padding>
+
+		<StackLayout HorizontalOptions="FillAndExpand">
+
+			<StackLayout.Spacing>
+				0
+			</StackLayout.Spacing>
+			<StackLayout.Padding>
+				0, 15, 0, 15
+			</StackLayout.Padding>
+
+			<ContentView HorizontalOptions="FillAndExpand">
+				<ContentView.GestureRecognizers>
+					<TapGestureRecognizer NumberOfTapsRequired="1"
+										  Command="{Binding TaskEditCommand}" />
+				</ContentView.GestureRecognizers>
+				<Label  x:Name="taskNameLabel"
+						HorizontalOptions="StartAndExpand"
+						Text="{Binding TaskName}"
+						FontAttributes="Bold"
+						FontSize="Large"
+						TextColor="{Binding TaskNameColor}" />
+			</ContentView>
+
+			<ContentView HorizontalOptions="FillAndExpand">
+				<ContentView.GestureRecognizers>
+					<TapGestureRecognizer NumberOfTapsRequired="1"
+										  Command="{Binding TaskEditCommand}" />
+				</ContentView.GestureRecognizers>
+				<Label	x:Name="taskDueDateLabel"
+						Text="{Binding DueDate}" />
+			</ContentView>
+
+		</StackLayout>
+
+		<Image  Source="checkbox_32.png"
+				Aspect="AspectFit"
+				HorizontalOptions="End"
+				Opacity="{Binding CheckOpacity}"
+				IsVisible="true">
+
+				<Image.GestureRecognizers>
+					<TapGestureRecognizer x:Name="tapDone" 
+										  NumberOfTapsRequired="1"
+										  Command="{Binding SetDoneCommand}" />
+				</Image.GestureRecognizers>
+
+		</Image>
+
+	</StackLayout>
 
 	</ViewCell.View>
 </ViewCell>

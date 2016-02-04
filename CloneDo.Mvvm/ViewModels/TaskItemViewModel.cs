@@ -1,5 +1,7 @@
 ﻿using System;
 using CloneDoMvvm.Models;
+using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace CloneDo.Mvvm.ViewModels
 {
@@ -10,6 +12,39 @@ namespace CloneDo.Mvvm.ViewModels
 		public TaskItemViewModel (TaskItem taskItem)
 		{
 			task = taskItem;
+
+			this.SaveCommand = new Command ((temp) => {
+				App.Database.SaveTask(task);
+				Navigation.PopAsync();
+
+				// Broadcast this message for other viewmodel
+				MessagingCenter.Send<TaskItemViewModel, TaskItem>(this, "TaskAdded", task);
+			});
+
+			this.DeleteCommand = new Command ((temp) => {
+				App.Database.DeleteTask(task.ID);
+				Navigation.PopAsync();
+
+				MessagingCenter.Send<TaskItemViewModel, TaskItem>(this, "TaskDeleted", task);
+
+			});
+				
+			this.ResetCommand = new Command (() => {
+				this.Task = "";
+				this.Description = "";
+				this.DueDate = DateTime.Today;
+				this.Done = false;
+			});
+		}
+
+
+		public string Title {
+			get {
+				if (task.ID > 0)
+					return String.Format ("Edit: {0}", Task);
+				else
+					return "New Task";
+			}
 		}
 
 		/// <summary>
@@ -22,7 +57,8 @@ namespace CloneDo.Mvvm.ViewModels
 				if (task.Task == value)
 					return;
 				task.Task = value;
-				OnPropertyChanged ();
+				OnPropertyChanged ("Task");
+				OnPropertyChanged ("CanSave");
 			}
 		}
 
@@ -36,7 +72,7 @@ namespace CloneDo.Mvvm.ViewModels
 				if (task.Description == value)
 					return;
 				task.Description = value;
-				OnPropertyChanged ();
+				OnPropertyChanged ("Description");
 			}
 		}
 
@@ -50,7 +86,7 @@ namespace CloneDo.Mvvm.ViewModels
 				if (task.Done == value)
 					return;
 				task.Done = value;
-				OnPropertyChanged ();
+				OnPropertyChanged ("Done");
 			}
 		}
 
@@ -64,9 +100,31 @@ namespace CloneDo.Mvvm.ViewModels
 				if (task.Date == value)
 					return;
 				task.Date = value;
-				OnPropertyChanged ();
+				OnPropertyChanged ("DueDate");
 			}
 		}
+
+		// Command interfaces
+		public ICommand SaveCommand {
+			get; protected set;
+		}
+
+		public ICommand DeleteCommand {
+			get; protected set;
+		}
+
+		public ICommand ResetCommand {
+			get; protected set;
+		}
+
+		public bool CanSave {
+			get { return task.Task.Length > 0; }
+		}
+
+		public bool CanDelete {
+			get { return task.ID > 0; }
+		}
+			
 	}
 }
 
