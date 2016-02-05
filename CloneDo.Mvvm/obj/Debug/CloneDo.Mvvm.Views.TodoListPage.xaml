@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+			 x:Class="CloneDo.Mvvm.TodoListPage"
+			 Title="{Binding AppName}">
+<!--	<ContentPage.Padding>
+		<OnPlatform x:TypeArguments="Thickness"
+					iOS="0, 20, 0, 0" />
+	</ContentPage.Padding>-->
+
+
+	<ContentPage.Content>
+		<ScrollView>
+			<StackLayout>
+
+				<!-- moved 20 pixels to the left so sakto lang yung separator line-->
+				<StackLayout.Padding>
+					-20, 0, 0, 0
+				</StackLayout.Padding>
+
+				<Button Text="New Task" Command="{Binding NewTaskCommand}" />
+
+				<ListView x:Name="todoList" 
+						  HasUnevenRows="true"
+						  ItemsSource="{Binding TodoList}" />
+			</StackLayout>
+		</ScrollView>
+
+	</ContentPage.Content>
+</ContentPage>

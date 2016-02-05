@@ -63,11 +63,49 @@ namespace CloneDo.Mvvm.Droid
 			}
 		}
 		
-		public partial class Style
+		public partial class Id
+		{
+			
+			// aapt resource value: 0x7f050002
+			public const int TaskNameText = 2131034114;
+			
+			// aapt resource value: 0x7f050001
+			public const int linearLayout1 = 2131034113;
+			
+			// aapt resource value: 0x7f050000
+			public const int relativeLayout1 = 2131034112;
+			
+			static Id()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Id()
+			{
+			}
+		}
+		
+		public partial class Layout
 		{
 			
 			// aapt resource value: 0x7f030000
-			public const int Mono_Android_Theme_Splash = 2130903040;
+			public const int AndroidSwipeCell = 2130903040;
+			
+			static Layout()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Layout()
+			{
+			}
+		}
+		
+		public partial class Style
+		{
+			
+			// aapt resource value: 0x7f040000
+			public const int Mono_Android_Theme_Splash = 2130968576;
 			
 			static Style()
 			{

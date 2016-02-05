@@ -1,0 +1,15 @@
+/Users/lldm0040/Desktop/Projects/mvvm.clonedo/CloneDo.Mvvm/obj/Debug/.NETPortable,Version=v4.5,Profile=Profile78.AssemblyAttribute.cs
+/Users/lldm0040/Desktop/Projects/mvvm.clonedo/CloneDo.Mvvm/obj/Debug/CloneDo.Mvvm.Views.TaskCell.xaml
+/Users/lldm0040/Desktop/Projects/mvvm.clonedo/CloneDo.Mvvm/obj/Debug/CloneDo.Mvvm.Views.TodoListPage.xaml
+/Users/lldm0040/Desktop/Projects/mvvm.clonedo/CloneDo.Mvvm/obj/Debug/CloneDo.Mvvm.Views.TaskItemPage.xaml
+/Users/lldm0040/Desktop/Projects/mvvm.clonedo/CloneDo.Mvvm/obj/Debug/TaskCell.xaml.g.cs
+/Users/lldm0040/Desktop/Projects/mvvm.clonedo/CloneDo.Mvvm/obj/Debug/TodoListPage.xaml.g.cs
+/Users/lldm0040/Desktop/Projects/mvvm.clonedo/CloneDo.Mvvm/obj/Debug/TaskItemPage.xaml.g.cs
+/Users/lldm0040/Desktop/Projects/mvvm.clonedo/CloneDo.Mvvm/bin/Debug/CloneDo.Mvvm.dll.mdb
+/Users/lldm0040/Desktop/Projects/mvvm.clonedo/CloneDo.Mvvm/bin/Debug/CloneDo.Mvvm.dll
+/Users/lldm0040/Desktop/Projects/mvvm.clonedo/CloneDo.Mvvm/obj/Debug/CloneDo.Mvvm.dll
+/Users/lldm0040/Desktop/Projects/mvvm.clonedo/CloneDo.Mvvm/obj/Debug/CloneDo.Mvvm.dll.mdb
+/Users/lldm0040/Desktop/Projects/mvvm.clonedo/CloneDo.Mvvm/bin/Debug/Xamarin.Forms.Core.dll
+/Users/lldm0040/Desktop/Projects/mvvm.clonedo/CloneDo.Mvvm/bin/Debug/Xamarin.Forms.Xaml.dll
+/Users/lldm0040/Desktop/Projects/mvvm.clonedo/CloneDo.Mvvm/bin/Debug/SQLitePCL.raw.dll
+/Users/lldm0040/Desktop/Projects/mvvm.clonedo/CloneDo.Mvvm/bin/Debug/SQLite-net.dll
