@@ -30,45 +30,6 @@ namespace CloneDo.Mvvm.ViewModels
 			}
 		}
 
-		private List<TaskCellViewModel> _doneList = new List<TaskCellViewModel>();
-		/// <summary>
-		/// List of tasks that have been accomplished.
-		/// </summary>
-		/// <value>The done list.</value>
-		public List<TaskCellViewModel> DoneList {
-			get { return _doneList; }
-			private set {
-				if (_doneList == value)
-					return;
-				_doneList = value;
-				OnPropertyChanged ();
-			}
-		}
-
-		private int _todoListHeight;
-		/// <summary>
-		/// Gets the height of the todo list.
-		/// </summary>
-		/// <value>The height of the todo list.</value>
-		public int TodoListHeight {
-			get { return _todoListHeight; }
-			private set {
-				_todoListHeight = value;
-			}
-		}
-
-		private int _doneListHeight;
-		/// <summary>
-		/// Gets the height of the done list.
-		/// </summary>
-		/// <value>The height of the done list.</value>
-		public int DoneListHeight {
-			get { return _doneListHeight; }
-			private set {
-				_doneListHeight = value;
-			}
-		}
-
 		public TodoListViewModel ()
 		{
 			
