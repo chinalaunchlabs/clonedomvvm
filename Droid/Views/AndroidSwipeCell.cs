@@ -15,6 +15,8 @@ namespace CloneDo.Mvvm.Droid
 {
 	public class AndroidSwipeCell: ViewCellRenderer
 	{
+		SwipeCell taskItem;
+
 		protected override Android.Views.View GetCellCore (Xamarin.Forms.Cell item, Android.Views.View convertView, ViewGroup parent, Context context) {
 			var x = (SwipeCell)item;
 
@@ -26,9 +28,20 @@ namespace CloneDo.Mvvm.Droid
 			}
 
 			view.FindViewById<TextView> (Resource.Id.TaskNameText).Text = x.TaskName;
+			view.FindViewById<TextView> (Resource.Id.TaskDateText).Text = x.TaskDate;
+//			view.Touch += TouchHandler;
+
+			taskItem = x;
 
 			return view;
 		}
+	
+//		private void TouchHandler(object sender, Android.Views.View.TouchEventArgs touchEventArgs) {
+//			Console.WriteLine ("{0} was tapped.", taskItem);
+//			switch (touchEventArgs.Event.Action & MotionEventArgs.Mask) {
+//
+//			}
+//		}
 	}
 }
 

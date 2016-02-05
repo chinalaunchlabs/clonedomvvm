@@ -14,6 +14,7 @@ namespace CloneDo.Mvvm
 //			todoList.ItemTemplate = new DataTemplate (typeof(TaskCell));
 			todoList.ItemTemplate = new DataTemplate (typeof(SwipeCell));
 			todoList.ItemTemplate.SetBinding (SwipeCell.TaskNameProperty, "TaskName");
+			todoList.ItemTemplate.SetBinding (SwipeCell.TaskDateProperty, "DueDate");
 
 			// prevent list items from being selected
 			todoList.ItemSelected += (sender, e) => {

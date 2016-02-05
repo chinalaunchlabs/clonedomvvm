@@ -16,9 +16,12 @@ public final class R {
         public static final int monoandroidsplash=0x7f020002;
     }
     public static final class id {
-        public static final int TaskNameText=0x7f050002;
-        public static final int linearLayout1=0x7f050001;
-        public static final int relativeLayout1=0x7f050000;
+        public static final int TaskDateText=0x7f050004;
+        public static final int TaskNameText=0x7f050003;
+        public static final int checkboxImg=0x7f050005;
+        public static final int linearLayout1=0x7f050002;
+        public static final int linearLayout2=0x7f050001;
+        public static final int relativeLayout=0x7f050000;
     }
     public static final class layout {
         public static final int androidswipecell=0x7f030000;
