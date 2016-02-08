@@ -11,10 +11,11 @@ namespace CloneDo.Mvvm
 		public TodoListPage ()
 		{
 			InitializeComponent ();
-//			todoList.ItemTemplate = new DataTemplate (typeof(TaskCell));
-			todoList.ItemTemplate = new DataTemplate (typeof(SwipeCell));
-			todoList.ItemTemplate.SetBinding (SwipeCell.TaskNameProperty, "TaskName");
-			todoList.ItemTemplate.SetBinding (SwipeCell.TaskDateProperty, "DueDate");
+			todoList.ItemTemplate = new DataTemplate (typeof(TaskCell));
+//			todoList.ItemTemplate = new DataTemplate (typeof(SwipeCell));
+//			todoList.ItemTemplate.SetBinding (SwipeCell.TaskNameProperty, "TaskName");
+//			todoList.ItemTemplate.SetBinding (SwipeCell.TaskDateProperty, "DueDate");
+//			todoList.ItemTemplate.SetBinding (SwipeCell.TaskDoneProperty, "Done");
 
 			// prevent list items from being selected
 			todoList.ItemSelected += (sender, e) => {

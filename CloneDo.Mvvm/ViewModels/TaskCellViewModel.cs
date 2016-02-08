@@ -43,6 +43,9 @@ namespace CloneDo.Mvvm.ViewModels
 				task.Done = value;
 				System.Diagnostics.Debug.WriteLine ("Done: " + task.Done);
 				OnPropertyChanged ("Done");
+				App.Database.SaveTask(task);
+				MessagingCenter.Send<TaskCellViewModel, TaskItem>(this, "TaskSetDone", task);
+
 			}
 		}
 

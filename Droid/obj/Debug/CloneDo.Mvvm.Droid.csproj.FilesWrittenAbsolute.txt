@@ -10,6 +10,7 @@
 /Users/lldm0040/Desktop/Projects/mvvm.clonedo/Droid/obj/Debug/res/drawable-xhdpi/icon.png
 /Users/lldm0040/Desktop/Projects/mvvm.clonedo/Droid/obj/Debug/res/drawable-xxhdpi/icon.png
 /Users/lldm0040/Desktop/Projects/mvvm.clonedo/Droid/obj/Debug/res/drawable/checkbox_32.png
+/Users/lldm0040/Desktop/Projects/mvvm.clonedo/Droid/obj/Debug/res/layout/androidswipecell.xml
 /Users/lldm0040/Desktop/Projects/mvvm.clonedo/Droid/obj/Debug/R.cs.flag
 /Users/lldm0040/Desktop/Projects/mvvm.clonedo/Droid/bin/Debug/com.launchlabspadawan.clonedo-Signed.apk
 /Users/lldm0040/Desktop/Projects/mvvm.clonedo/Droid/obj/Debug/uploadflags.txt
@@ -24,4 +25,3 @@
 /Users/lldm0040/Desktop/Projects/mvvm.clonedo/Droid/bin/Debug/SQLitePCL.raw.dll
 /Users/lldm0040/Desktop/Projects/mvvm.clonedo/Droid/bin/Debug/CloneDo.Mvvm.dll
 /Users/lldm0040/Desktop/Projects/mvvm.clonedo/Droid/bin/Debug/CloneDo.Mvvm.dll.mdb
-/Users/lldm0040/Desktop/Projects/mvvm.clonedo/Droid/obj/Debug/res/layout/androidswipecell.xml

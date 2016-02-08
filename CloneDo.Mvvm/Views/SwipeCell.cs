@@ -1,5 +1,6 @@
 ﻿using System;
 using Xamarin.Forms;
+using CloneDo.Mvvm.ViewModels;
 
 namespace CloneDo.Mvvm
 {
@@ -32,7 +33,11 @@ namespace CloneDo.Mvvm
 
 		public bool TaskDone {
 			get { return (bool)base.GetValue (TaskDoneProperty); }
-			set { base.SetValue (TaskDoneProperty, value); }
+			set { 
+				base.SetValue (TaskDoneProperty, value); 
+				System.Diagnostics.Debug.WriteLine ("SwipeCell:: {0}.Done = {1}.", TaskName, value);
+				((TaskCellViewModel)base.BindingContext).Done = value;
+			}
 		}
 
 		public static readonly BindableProperty TaskDoneProperty =
