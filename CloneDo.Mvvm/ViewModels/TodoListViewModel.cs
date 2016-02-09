@@ -70,9 +70,16 @@ namespace CloneDo.Mvvm.ViewModels
 
 			MessagingCenter.Subscribe<TaskCellViewModel, TaskItem> (this, "TaskTapped", (sender, task) => {
 				System.Diagnostics.Debug.WriteLine("Task '{0}' was tapped", task.Name);
-				TaskItemViewModel viewModel = new TaskItemViewModel (task);
-				Navigation.PushAsync (ViewFactory.CreatePage (viewModel));
+
+				TaskTapped(task.ID);
 			});
+		}
+
+		private async void TaskTapped(int id) {
+			// fetch task
+			TaskItem fetchedTask = await _client.FetchTask(id);
+			TaskItemViewModel viewModel = new TaskItemViewModel (fetchedTask);
+			Navigation.PushAsync (ViewFactory.CreatePage (viewModel));
 		}
 	
 		/// <summary>
