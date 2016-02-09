@@ -1,5 +1,5 @@
 ﻿using System;
-using CloneDoMvvm.Models;
+using CloneDo.Mvvm.Models;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -52,11 +52,11 @@ namespace CloneDo.Mvvm.ViewModels
 		/// </summary>
 		/// <value>The task.</value>
 		public string Task {
-			get { return task.Task; }
+			get { return task.Name; }
 			set {
-				if (task.Task == value)
+				if (task.Name == value)
 					return;
-				task.Task = value;
+				task.Name = value;
 				OnPropertyChanged ("Task");
 				OnPropertyChanged ("CanSave");
 			}
@@ -118,7 +118,7 @@ namespace CloneDo.Mvvm.ViewModels
 		}
 
 		public bool CanSave {
-			get { return task.Task.Length > 0; }
+			get { return task.Name.Length > 0; }
 		}
 
 		public bool CanDelete {

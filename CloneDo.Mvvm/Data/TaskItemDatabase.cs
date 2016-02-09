@@ -4,7 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using Xamarin.Forms;
-using CloneDoMvvm.Models;
+using CloneDo.Mvvm.Models;
 
 namespace CloneDo.Mvvm
 {

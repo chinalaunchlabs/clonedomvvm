@@ -17,7 +17,6 @@ namespace CloneDo.Mvvm
 			todoList.ItemSelected += (sender, e) => {
 				((ListView)sender).SelectedItem = null;
 			};
-//			todoList.SetBinding (ListView.SelectedItemProperty, "SelectedTaskItem");
 		}
 	}
 }

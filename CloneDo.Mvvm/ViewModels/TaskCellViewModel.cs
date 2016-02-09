@@ -1,5 +1,5 @@
 ﻿using System;
-using CloneDoMvvm.Models;
+using CloneDo.Mvvm.Models;
 using Xamarin.Forms;
 using System.Windows.Input;
 
@@ -28,7 +28,7 @@ namespace CloneDo.Mvvm.ViewModels
 		}
 
 		public string TaskName {
-			get { return task.Task; }
+			get { return task.Name; }
 		}
 
 		public string DueDate {
