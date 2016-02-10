@@ -15,19 +15,19 @@ namespace CloneDo.Mvvm.ViewModels
 
 			this.SaveCommand = new Command ((temp) => {
 //				App.Database.SaveTask(task);
-				App.Client.NewTask(task);
+				App.Client.SaveTask(task);
 				Navigation.PopAsync();
 
 				// Broadcast this message for other viewmodel
 				MessagingCenter.Send<TaskItemViewModel, TaskItem>(this, "TaskAdded", task);
 			});
 
-			this.DeleteCommand = new Command ((temp) => {
+			this.DeleteCommand = new Command (async (temp) => {
 //				App.Database.DeleteTask(task.ID);
+				await App.Client.DeleteTask(task.ID);
 				Navigation.PopAsync();
 
 				MessagingCenter.Send<TaskItemViewModel, TaskItem>(this, "TaskDeleted", task);
-
 			});
 				
 			this.ResetCommand = new Command (() => {

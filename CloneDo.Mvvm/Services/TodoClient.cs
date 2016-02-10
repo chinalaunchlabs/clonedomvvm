@@ -40,8 +40,15 @@ namespace CloneDo.Mvvm.Services
 			return task;
 		}
 
+		public void SaveTask(TaskItem task) {
+			if (task.ID == 0) {
+				NewTask (task);
+			} else {
+				UpdateTask (task);
+			}
+		}
+
 		public async Task<bool> NewTask(TaskItem task) {
-		
 			var json = JsonConvert.SerializeObject (task, Formatting.Indented, new JsonSerializerSettings {
 				ContractResolver = new LowercaseContractResolver()	// turn property names into lowercase
 			});
@@ -50,6 +57,30 @@ namespace CloneDo.Mvvm.Services
 				System.Diagnostics.Debug.WriteLine ("Posted successfully.");
 			else
 				System.Diagnostics.Debug.WriteLine ("Post not successful.");
+			return success;
+		}
+
+		public async Task<bool> DeleteTask(int id) {
+			string parameters = string.Format ("tasks/{0}", id);
+			bool success = await _restClient.Delete (parameters);
+			if (success)
+				System.Diagnostics.Debug.WriteLine ("Deleted successfully.");
+			else
+				System.Diagnostics.Debug.WriteLine ("Delete not successful.");
+			return success;
+
+		}
+
+		public async Task<bool> UpdateTask(TaskItem task) {
+			var json = JsonConvert.SerializeObject (task, Formatting.Indented, new JsonSerializerSettings {
+				ContractResolver = new LowercaseContractResolver()	// turn property names into lowercase
+			});
+			string parameters = string.Format ("tasks/{0}", task.ID);
+			bool success = await _restClient.Put (parameters, json);
+			if (success)
+				System.Diagnostics.Debug.WriteLine ("Updated successfully.");
+			else
+				System.Diagnostics.Debug.WriteLine ("Update not successful.");
 			return success;
 		}
 			

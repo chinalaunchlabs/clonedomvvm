@@ -59,7 +59,30 @@ namespace CloneDo.Mvvm.Services
 			} else {
 				return false;
 			}
+		}
 
+		/// <summary>
+		/// Performs an HTTP DELETE request.
+		/// </summary>
+		/// <param name="parameters">Parameters.</param>
+		public async Task<bool> Delete(string parameters) {
+			HttpResponseMessage response = await _client.DeleteAsync (parameters);
+			if (response.IsSuccessStatusCode) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		public async Task<bool> Put(string uri, string json) {
+			StringContent body = new StringContent (json, Encoding.UTF8, "application/json");
+			HttpResponseMessage response = await _client.PutAsync (uri, body);
+
+			if (response.IsSuccessStatusCode) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 
 	}

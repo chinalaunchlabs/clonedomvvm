@@ -42,11 +42,8 @@ namespace CloneDo.Mvvm.ViewModels
 
 			// Commands
 			this.NewTaskCommand = new Command (() => {
-				System.Diagnostics.Debug.WriteLine("Making new task");
 				TaskItem newTask = new TaskItem();
-				System.Diagnostics.Debug.WriteLine("???");
 				TaskItemViewModel vm = new TaskItemViewModel(newTask);
-				System.Diagnostics.Debug.WriteLine("!!!");
 				Navigation.PushAsync(ViewFactory.CreatePage(vm));
 			});
 
@@ -72,7 +69,6 @@ namespace CloneDo.Mvvm.ViewModels
 
 			MessagingCenter.Subscribe<TaskCellViewModel, TaskItem> (this, "TaskTapped", (sender, task) => {
 				System.Diagnostics.Debug.WriteLine("Task '{0}' was tapped", task.Name);
-
 				TaskTapped(task.ID);
 			});
 		}
