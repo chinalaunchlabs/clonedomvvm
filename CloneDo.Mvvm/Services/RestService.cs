@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Text;
 
 namespace CloneDo.Mvvm.Services
 {
@@ -19,6 +20,9 @@ namespace CloneDo.Mvvm.Services
 		{
 			_client = new HttpClient ();
 			_client.BaseAddress = new Uri (url);
+//			_client.Timeout = 30000; // wait 30 seconds
+			_client.DefaultRequestHeaders.Accept.Clear ();
+			_client.DefaultRequestHeaders.Accept.Add (new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue ("application/json"));
 		}
 
 		/// <summary>
@@ -27,9 +31,6 @@ namespace CloneDo.Mvvm.Services
 		/// <param name="parameters">Parameters.</param>
 		public async Task<string> Get(string parameters) {
 			string rawResponse;
-
-			_client.DefaultRequestHeaders.Accept.Clear ();
-			_client.DefaultRequestHeaders.Accept.Add (new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue ("application/json"));
 
 			HttpResponseMessage response = await _client.GetAsync (parameters);
 			if (response.IsSuccessStatusCode) {
@@ -47,10 +48,11 @@ namespace CloneDo.Mvvm.Services
 		/// </summary>
 		/// <returns>true on success, false otherwise</returns>
 		/// <param name="uri">URI.</param>
-		/// <param name="content">Url-encoded content (formatted via FormUrlEncodedContent() for example).</param>
-		public async Task<bool> Post(string uri, string content) {
+		/// <param name="content">Serialized JSON object.</param>
+		public async Task<bool> Post(string uri, string json) {
 
-			HttpResponseMessage response = await _client.PostAsync (uri, new StringContent(content));
+			StringContent body = new StringContent (json, Encoding.UTF8, "application/json");
+			HttpResponseMessage response = await _client.PostAsync (uri, body);
 
 			if (response.IsSuccessStatusCode) {
 				return true;

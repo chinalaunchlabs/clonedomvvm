@@ -15,17 +15,18 @@ namespace CloneDo.Mvvm.Services
 		// will send the emulator to its own loopback interface
 		// but Xamarin Android Player is stupid and defines its own IP for these things
 
-		private string ApiBase = "http://localhost:3000/"; // for iOS
-		private RestService restClient;
+//		private string ApiBase = "http://localhost:3000/"; // for iOS
+		private string ApiBase = "http://192.168.254.200:3000/"; // on private network
+		private RestService _restClient;
 
 		public TodoClient ()
 		{
-			restClient = new RestService (ApiBase);	
+			_restClient = new RestService (ApiBase);	
 		}
 
 		public async Task<List<TaskItem>> FetchAllTasksAsync() {
 			string parameters = "tasks";
-			var response = await restClient.Get(parameters);
+			var response = await _restClient.Get(parameters);
 			System.Diagnostics.Debug.WriteLine (response);
 			List<TaskItem> tasks = JsonConvert.DeserializeObject<List<TaskItem>> (response);
 			return tasks;
@@ -33,12 +34,25 @@ namespace CloneDo.Mvvm.Services
 
 		public async Task<TaskItem> FetchTask(int id) {
 			string parameters = string.Format ("tasks/{0}", id);
-			var response = await restClient.Get (parameters);
+			var response = await _restClient.Get (parameters);
 			System.Diagnostics.Debug.WriteLine (response);
 			TaskItem task = JsonConvert.DeserializeObject<TaskItem> (response);
 			return task;
 		}
 
+		public async Task<bool> NewTask(TaskItem task) {
+		
+			var json = JsonConvert.SerializeObject (task, Formatting.Indented, new JsonSerializerSettings {
+				ContractResolver = new LowercaseContractResolver()	// turn property names into lowercase
+			});
+			bool success = await _restClient.Post ("tasks/", json);
+			if (success)
+				System.Diagnostics.Debug.WriteLine ("Posted successfully.");
+			else
+				System.Diagnostics.Debug.WriteLine ("Post not successful.");
+			return success;
+		}
+			
 	}
 }
 

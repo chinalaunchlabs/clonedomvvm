@@ -3,6 +3,7 @@
 using Xamarin.Forms;
 using CloneDo.Mvvm.Factories;
 using CloneDo.Mvvm.ViewModels;
+using CloneDo.Mvvm.Services;
 
 namespace CloneDo.Mvvm
 {
@@ -14,6 +15,14 @@ namespace CloneDo.Mvvm
 			get {
 				_database = _database ?? new TaskItemDatabase ();
 				return _database;
+			}
+		}
+
+		static TodoClient _client;
+		public static TodoClient Client {
+			get {
+				_client = _client ?? new TodoClient ();
+				return _client;
 			}
 		}
 			

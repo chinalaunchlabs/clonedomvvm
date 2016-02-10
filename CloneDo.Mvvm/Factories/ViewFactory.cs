@@ -53,6 +53,8 @@ namespace CloneDo.Mvvm.Factories
 
 			// view and viewmodel coupling
 			viewModel.Navigation = new CustomNavigation (page);
+			System.Diagnostics.Debug.WriteLine ("page == null: " + page == null);
+			System.Diagnostics.Debug.WriteLine ("viewmodel == null: " + viewModel == null);
 			page.BindingContext = viewModel;
 
 			return page;

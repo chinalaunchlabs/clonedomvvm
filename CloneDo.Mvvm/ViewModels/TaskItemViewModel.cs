@@ -14,7 +14,8 @@ namespace CloneDo.Mvvm.ViewModels
 			task = taskItem;
 
 			this.SaveCommand = new Command ((temp) => {
-				App.Database.SaveTask(task);
+//				App.Database.SaveTask(task);
+				App.Client.NewTask(task);
 				Navigation.PopAsync();
 
 				// Broadcast this message for other viewmodel
@@ -22,7 +23,7 @@ namespace CloneDo.Mvvm.ViewModels
 			});
 
 			this.DeleteCommand = new Command ((temp) => {
-				App.Database.DeleteTask(task.ID);
+//				App.Database.DeleteTask(task.ID);
 				Navigation.PopAsync();
 
 				MessagingCenter.Send<TaskItemViewModel, TaskItem>(this, "TaskDeleted", task);

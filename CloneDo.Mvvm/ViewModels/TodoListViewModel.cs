@@ -44,7 +44,9 @@ namespace CloneDo.Mvvm.ViewModels
 			this.NewTaskCommand = new Command (() => {
 				System.Diagnostics.Debug.WriteLine("Making new task");
 				TaskItem newTask = new TaskItem();
+				System.Diagnostics.Debug.WriteLine("???");
 				TaskItemViewModel vm = new TaskItemViewModel(newTask);
+				System.Diagnostics.Debug.WriteLine("!!!");
 				Navigation.PushAsync(ViewFactory.CreatePage(vm));
 			});
 
