@@ -11,31 +11,13 @@ namespace CloneDo.Mvvm.ViewModels
 {
 	public class TodoListViewModel : BaseViewModel
 	{
-
-		public string AppName {
-			get { return "CloneDo"; }
-		}
-
 		private List<TaskCellViewModel> _todoList = new List<TaskCellViewModel> ();
-		/// <summary>
-		/// List of tasks to be done.
-		/// </summary>
-		/// <value>The todo list.</value>
-		public List<TaskCellViewModel> TodoList {
-			get { return _todoList; }
-			private set {
-				if (_todoList == value)
-					return;
-				_todoList = value;
-				OnPropertyChanged ();
-			}
-		}
 
-		private TodoClient _client;
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CloneDo.Mvvm.ViewModels.TodoListViewModel"/> class.
+		/// </summary>
 		public TodoListViewModel ()
 		{
-
-			_client = new TodoClient ();
 			
 			// Initialize
 			LoadTasks ();
@@ -53,62 +35,45 @@ namespace CloneDo.Mvvm.ViewModels
 
 			// Messages
 			MessagingCenter.Subscribe<TaskItemViewModel, TaskItem> (this, "TaskAdded", (sender, task) => {
-				System.Diagnostics.Debug.WriteLine("Task '{0}' was saved", task.Name);
 				LoadTasks();
 			});
 
 			MessagingCenter.Subscribe<TaskItemViewModel, TaskItem> (this, "TaskDeleted", (sender, task) => {
-				System.Diagnostics.Debug.WriteLine("Task '{0}' was deleted", task.Name);
 				LoadTasks();
 			});
 
 			MessagingCenter.Subscribe<TaskCellViewModel, TaskItem> (this, "TaskSetDone", (sender, task) => {
-				System.Diagnostics.Debug.WriteLine("Task '{0}' doneness was set/unset", task.Name);
+				System.Diagnostics.Debug.WriteLine("TodoListViewModel::Task set done.");
 				LoadTasks();
 			});
 
 			MessagingCenter.Subscribe<TaskCellViewModel, TaskItem> (this, "TaskTapped", (sender, task) => {
-				System.Diagnostics.Debug.WriteLine("Task '{0}' was tapped", task.Name);
 				TaskTapped(task.ID);
+			});
+
+			MessagingCenter.Subscribe<TodoClient, TodoResponse> (this, "StatusMessage", (sender, response) => {
+		
 			});
 		}
 
-		private async void TaskTapped(int id) {
-			// fetch task
-			TaskItem fetchedTask = await _client.FetchTask(id);
-			TaskItemViewModel viewModel = new TaskItemViewModel (fetchedTask);
-			Navigation.PushAsync (ViewFactory.CreatePage (viewModel));
+
+		public string AppName {
+			get { return "CloneDo"; }
 		}
-	
+
 		/// <summary>
-		/// Populates the list with tasks from the database. Called to force a change in the UI.
+		/// List of tasks to be done.
 		/// </summary>
-//		private void LoadTasks() {
-//			var tasks = App.Database.GetTasksDone ();
-//			List<TaskCellViewModel> doneCollection = new List<TaskCellViewModel> ();
-//			foreach (TaskItem t in tasks) {
-//				doneCollection.Add (new TaskCellViewModel (t)); 
-//			}
-//
-//			tasks = App.Database.GetTasksDone (false);
-//			List<TaskCellViewModel> todoCollection = new List<TaskCellViewModel> ();
-//			todoCollection.Clear ();
-//			foreach (TaskItem t in tasks) {
-//				todoCollection.Add (new TaskCellViewModel (t)); 
-//			}
-//			TodoList = todoCollection;
-//			TodoList.AddRange(doneCollection);
-//		}
-
-		private async void LoadTasks() {
-			List<TaskItem> tasks = await _client.FetchAllTasksAsync ();
-			List<TaskCellViewModel> taskCells = new List<TaskCellViewModel> ();
-			foreach (var task in tasks) {
-				taskCells.Add (new TaskCellViewModel (task));
+		/// <value>The todo list.</value>
+		public List<TaskCellViewModel> TodoList {
+			get { return _todoList; }
+			private set {
+				if (_todoList == value)
+					return;
+				_todoList = value;
 			}
-			TodoList = taskCells;
 		}
-
+			
 		// Command interfaces
 		public ICommand NewTaskCommand {
 			get;
@@ -118,6 +83,23 @@ namespace CloneDo.Mvvm.ViewModels
 		public ICommand ReloadCommand {
 			get;
 			protected set;
+		}
+
+		private async void TaskTapped(int id) {
+			// fetch task
+			TaskItem fetchedTask = await App.Client.FetchTask(id);
+			TaskItemViewModel viewModel = new TaskItemViewModel (fetchedTask);
+			Navigation.PushAsync (ViewFactory.CreatePage (viewModel));
+		}
+
+		private async void LoadTasks() {
+			System.Diagnostics.Debug.WriteLine ("TodoListViewModel::Loading tasks...");
+			List<TaskItem> tasks = await App.Client.FetchAllTasks ();
+			List<TaskCellViewModel> taskCells = new List<TaskCellViewModel> ();
+			foreach (var task in tasks) {
+				taskCells.Add (new TaskCellViewModel (task));
+			}
+			TodoList = taskCells;
 		}
 	
 	}

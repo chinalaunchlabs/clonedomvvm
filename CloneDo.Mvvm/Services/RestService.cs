@@ -1,4 +1,5 @@
 ﻿using System;
+using CloneDo.Mvvm.Services;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text;
@@ -6,85 +7,93 @@ using System.Text;
 namespace CloneDo.Mvvm.Services
 {
 	/// <summary>
-	/// REST wrapper around the Microsoft.HttpClient client.
+	/// Wrapper for the Microsoft.HttpClient library.
 	/// </summary>
-	public class RestService
+	public class RestService : IRestService
 	{
 		private HttpClient _client; 
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CloneDo.Mvvm.Services.RestClient"/> class.
+		/// Initializes a new instance of the <see cref="CloneDo.Mvvm.Services.RestService"/> class.
 		/// </summary>
-		/// <param name="url">Base URL for the web service API.</param>
-		public RestService (string url)
+		public RestService ()
 		{
 			_client = new HttpClient ();
-			_client.BaseAddress = new Uri (url);
-//			_client.Timeout = 30000; // wait 30 seconds
 			_client.DefaultRequestHeaders.Accept.Clear ();
 			_client.DefaultRequestHeaders.Accept.Add (new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue ("application/json"));
 		}
 
 		/// <summary>
-		/// Performs an HTTP GET request.
+		/// Initializes a new instance of the <see cref="CloneDo.Mvvm.Services.RestService"/> class.
 		/// </summary>
-		/// <param name="parameters">Parameters.</param>
-		public async Task<string> Get(string parameters) {
-			string rawResponse;
-
-			HttpResponseMessage response = await _client.GetAsync (parameters);
-			if (response.IsSuccessStatusCode) {
-				rawResponse = await response.Content.ReadAsStringAsync ();
-			} else {
-				rawResponse = "";
-				// TODO: throw exception?
-			}
-
-			return rawResponse;
+		/// <param name="url">Base URI of the API.</param>
+		public RestService (string url)
+		{
+			_client = new HttpClient ();
+			_client.BaseAddress = new Uri (url);
+			_client.DefaultRequestHeaders.Accept.Clear ();
+			_client.DefaultRequestHeaders.Accept.Add (new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue ("application/json"));
 		}
 
 		/// <summary>
-		/// Performs an HTTP POST Request.
+		/// Asynchronously performs an HTTP POST request.
 		/// </summary>
-		/// <returns>true on success, false otherwise</returns>
-		/// <param name="uri">URI.</param>
-		/// <param name="content">Serialized JSON object.</param>
-		public async Task<bool> Post(string uri, string json) {
-
+		/// <param name="uri">Create URI.</param>
+		/// <param name="json">Serialized JSON object.</param>
+		/// <typeparam name="T">IResponseObject.</typeparam>
+		public async Task<T> Post<T>(string uri, string json) where T: IResponseObject {
 			StringContent body = new StringContent (json, Encoding.UTF8, "application/json");
 			HttpResponseMessage response = await _client.PostAsync (uri, body);
 
-			if (response.IsSuccessStatusCode) {
-				return true;
-			} else {
-				return false;
-			}
+			IResponseObject instance = ((IResponseObject)Activator.CreateInstance<T> ());
+			instance.Serialize (await response.Content.ReadAsStringAsync());
+
+			return (T)instance;
 		}
 
 		/// <summary>
-		/// Performs an HTTP DELETE request.
+		/// Asynchronously performs an HTTP GET request.
 		/// </summary>
-		/// <param name="parameters">Parameters.</param>
-		public async Task<bool> Delete(string parameters) {
-			HttpResponseMessage response = await _client.DeleteAsync (parameters);
-			if (response.IsSuccessStatusCode) {
-				return true;
-			} else {
-				return false;
-			}
+		/// <param name="parameters">Fetch URI.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public async Task<T> Get<T>(string parameters) where T: IResponseObject {
+			HttpResponseMessage response = await _client.GetAsync (parameters);
+
+			IResponseObject instance = ((IResponseObject)Activator.CreateInstance<T>());
+			instance.Serialize (await response.Content.ReadAsStringAsync ());
+
+			return (T) instance;
 		}
 
-		public async Task<bool> Put(string uri, string json) {
+		/// <summary>
+		/// Asynchronously performs an HTTP PUT request.
+		/// </summary>
+		/// <param name="uri">Update URI.</param>
+		/// <param name="json">Serialized JSON object.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public async Task<T> Put<T> (string uri, string json) where T : IResponseObject {
 			StringContent body = new StringContent (json, Encoding.UTF8, "application/json");
-			HttpResponseMessage response = await _client.PutAsync (uri, body);
+			HttpResponseMessage response = await _client.PutAsync(uri, body);
 
-			if (response.IsSuccessStatusCode) {
-				return true;
-			} else {
-				return false;
-			}
+			IResponseObject instance = ((IResponseObject)Activator.CreateInstance<T>());
+			instance.Serialize(await response.Content.ReadAsStringAsync());
+
+			return (T)instance;
 		}
 
+		/// <summary>
+		/// Asynchronously performs an HTTP DELETE request.
+		/// </summary>
+		/// <param name="parameters">Destroy URI.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public async Task<T> Delete<T> (string parameters) where T : IResponseObject {
+			HttpResponseMessage response = await _client.DeleteAsync(parameters);
+
+			IResponseObject instance = ((IResponseObject)Activator.CreateInstance<T>());
+			instance.Serialize(await response.Content.ReadAsStringAsync());
+
+			return (T)instance;
+		}
 	}
 }
 

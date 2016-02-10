@@ -14,8 +14,6 @@ namespace CloneDo.Mvvm.ViewModels
 
 			this.SetDoneCommand = new Command (() => {
 				Done = !Done;
-				App.Database.SaveTask(task);
-				MessagingCenter.Send<TaskCellViewModel, TaskItem>(this, "TaskSetDone", task);
 			});
 
 			this.TaskEditCommand = new Command (() => {
@@ -40,9 +38,8 @@ namespace CloneDo.Mvvm.ViewModels
 			set {
 				if (task.Done == value)
 					return;
-				task.Done = value;
-				System.Diagnostics.Debug.WriteLine ("Done: " + task.Done);
-				OnPropertyChanged ("Done");
+//				task.Done = value;
+				SetDone (value);
 			}
 		}
 
@@ -68,7 +65,6 @@ namespace CloneDo.Mvvm.ViewModels
 			}
 		}
 
-
 		// Command interfaces
 		public ICommand SetDoneCommand {
 			get;
@@ -80,6 +76,16 @@ namespace CloneDo.Mvvm.ViewModels
 			private set;
 		}
 
+		private async void SetDone(bool value) {
+			task.Done = value;
+			bool success = await App.Client.UpdateTask (task);
+			if (success) {
+				OnPropertyChanged ("Done");
+				MessagingCenter.Send<TaskCellViewModel, TaskItem> (this, "TaskSetDone", task);
+			} else {
+				task.Done = !value;
+			}
+		}
 
 		private string StringifyDate() {
 			var partialString = "";

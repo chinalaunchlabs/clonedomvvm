@@ -23,8 +23,7 @@
 					<TapGestureRecognizer NumberOfTapsRequired="1"
 										  Command="{Binding TaskEditCommand}" />
 				</ContentView.GestureRecognizers>
-				<Label  x:Name="taskNameLabel"
-						HorizontalOptions="StartAndExpand"
+				<Label  HorizontalOptions="StartAndExpand"
 						Text="{Binding TaskName}"
 						FontAttributes="Bold"
 						FontSize="Large"
@@ -36,8 +35,7 @@
 					<TapGestureRecognizer NumberOfTapsRequired="1"
 										  Command="{Binding TaskEditCommand}" />
 				</ContentView.GestureRecognizers>
-				<Label	x:Name="taskDueDateLabel"
-						Text="{Binding DueDate}" />
+				<Label Text="{Binding DueDate}" />
 			</ContentView>
 
 		</StackLayout>
@@ -49,8 +47,7 @@
 				IsVisible="true">
 
 				<Image.GestureRecognizers>
-					<TapGestureRecognizer x:Name="tapDone" 
-										  NumberOfTapsRequired="1"
+					<TapGestureRecognizer NumberOfTapsRequired="1"
 										  Command="{Binding SetDoneCommand}" />
 				</Image.GestureRecognizers>
 
