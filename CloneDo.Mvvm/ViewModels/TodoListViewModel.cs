@@ -52,7 +52,15 @@ namespace CloneDo.Mvvm.ViewModels
 			});
 
 			MessagingCenter.Subscribe<TodoClient, TodoResponse> (this, "StatusMessage", (sender, response) => {
-		
+				System.Diagnostics.Debug.WriteLine("TodoListViewModel::Status dialog here");
+				Navigation.DisplayAlert(response.Ok?"Success":"Error", response.Message, "Ok");
+				Navigation.PopAsync(); 
+			});
+
+			MessagingCenter.Subscribe<TodoClient, string> (this, "ErrMessage", (sender, message) => {
+
+				Navigation.DisplayAlert("Error!", message, "Ok");
+//				Navigation.PopAsync(); 
 			});
 		}
 
@@ -71,6 +79,7 @@ namespace CloneDo.Mvvm.ViewModels
 				if (_todoList == value)
 					return;
 				_todoList = value;
+				OnPropertyChanged ();
 			}
 		}
 			
@@ -95,11 +104,18 @@ namespace CloneDo.Mvvm.ViewModels
 		private async void LoadTasks() {
 			System.Diagnostics.Debug.WriteLine ("TodoListViewModel::Loading tasks...");
 			List<TaskItem> tasks = await App.Client.FetchAllTasks ();
-			List<TaskCellViewModel> taskCells = new List<TaskCellViewModel> ();
-			foreach (var task in tasks) {
-				taskCells.Add (new TaskCellViewModel (task));
+
+//			System.Diagnostics.Debug.WriteLine ("tasks.Count = " + tasks.Count);
+
+			if (tasks.Count > 0) {
+				List<TaskCellViewModel> taskCells = new List<TaskCellViewModel> ();
+				foreach (var task in tasks) {
+					taskCells.Add (new TaskCellViewModel (task));
+				}
+				TodoList = taskCells;
 			}
-			TodoList = taskCells;
+
+			System.Diagnostics.Debug.WriteLine ("LoadTasks:: exit");
 		}
 	
 	}

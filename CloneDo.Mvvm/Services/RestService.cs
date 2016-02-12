@@ -3,6 +3,7 @@ using CloneDo.Mvvm.Services;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text;
+using System.Threading;
 
 namespace CloneDo.Mvvm.Services
 {
@@ -19,8 +20,7 @@ namespace CloneDo.Mvvm.Services
 		public RestService ()
 		{
 			_client = new HttpClient ();
-			_client.DefaultRequestHeaders.Accept.Clear ();
-			_client.DefaultRequestHeaders.Accept.Add (new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue ("application/json"));
+			InitializeClient ();
 		}
 
 		/// <summary>
@@ -31,8 +31,16 @@ namespace CloneDo.Mvvm.Services
 		{
 			_client = new HttpClient ();
 			_client.BaseAddress = new Uri (url);
+			InitializeClient ();
+		}
+
+		/// <summary>
+		/// Sets up the necessary client details, eg. header defaults.
+		/// </summary>
+		private void InitializeClient() {
 			_client.DefaultRequestHeaders.Accept.Clear ();
 			_client.DefaultRequestHeaders.Accept.Add (new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue ("application/json"));
+			_client.Timeout = TimeSpan.FromMilliseconds (1000);	// TODO: Edit artificial timeout later.
 		}
 
 		/// <summary>
@@ -43,10 +51,16 @@ namespace CloneDo.Mvvm.Services
 		/// <typeparam name="T">IResponseObject.</typeparam>
 		public async Task<T> Post<T>(string uri, string json) where T: IResponseObject {
 			StringContent body = new StringContent (json, Encoding.UTF8, "application/json");
-			HttpResponseMessage response = await _client.PostAsync (uri, body);
-
 			IResponseObject instance = ((IResponseObject)Activator.CreateInstance<T> ());
-			instance.Serialize (await response.Content.ReadAsStringAsync());
+			CancellationTokenSource source = new CancellationTokenSource ();
+
+			try {
+				HttpResponseMessage response = await _client.PostAsync (uri, body, source.Token);
+				instance.Serialize (await response.Content.ReadAsStringAsync());
+			} 
+			catch (Exception e) {
+				instance.HandleException (e, source);
+			}
 
 			return (T)instance;
 		}
@@ -57,12 +71,18 @@ namespace CloneDo.Mvvm.Services
 		/// <param name="parameters">Fetch URI.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public async Task<T> Get<T>(string parameters) where T: IResponseObject {
-			HttpResponseMessage response = await _client.GetAsync (parameters);
-
 			IResponseObject instance = ((IResponseObject)Activator.CreateInstance<T>());
-			instance.Serialize (await response.Content.ReadAsStringAsync ());
+			CancellationTokenSource source = new CancellationTokenSource ();
+			CancellationToken token = source.Token;
+			try {
+				HttpResponseMessage response = await _client.GetAsync (parameters, token);
+				instance.Serialize (await response.Content.ReadAsStringAsync ());
+			}
+			catch (Exception e) {
+				instance.HandleException(e, source);
+			}
 
-			return (T) instance;
+			return (T)instance;
 		}
 
 		/// <summary>
@@ -73,10 +93,16 @@ namespace CloneDo.Mvvm.Services
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public async Task<T> Put<T> (string uri, string json) where T : IResponseObject {
 			StringContent body = new StringContent (json, Encoding.UTF8, "application/json");
-			HttpResponseMessage response = await _client.PutAsync(uri, body);
-
 			IResponseObject instance = ((IResponseObject)Activator.CreateInstance<T>());
-			instance.Serialize(await response.Content.ReadAsStringAsync());
+			CancellationTokenSource source = new CancellationTokenSource ();
+
+			try {
+				HttpResponseMessage response = await _client.PutAsync(uri, body, source.Token);
+				instance.Serialize(await response.Content.ReadAsStringAsync());
+			}
+			catch (Exception e) {
+				instance.HandleException (e, source);
+			}
 
 			return (T)instance;
 		}
@@ -87,10 +113,16 @@ namespace CloneDo.Mvvm.Services
 		/// <param name="parameters">Destroy URI.</param>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
 		public async Task<T> Delete<T> (string parameters) where T : IResponseObject {
-			HttpResponseMessage response = await _client.DeleteAsync(parameters);
-
 			IResponseObject instance = ((IResponseObject)Activator.CreateInstance<T>());
-			instance.Serialize(await response.Content.ReadAsStringAsync());
+			CancellationTokenSource source = new CancellationTokenSource ();
+
+			try {
+				HttpResponseMessage response = await _client.DeleteAsync(parameters, source.Token);
+				instance.Serialize(await response.Content.ReadAsStringAsync());
+			}
+			catch (Exception e) {
+				instance.HandleException (e, source);
+			}
 
 			return (T)instance;
 		}

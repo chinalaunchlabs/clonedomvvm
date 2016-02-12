@@ -13,10 +13,10 @@ namespace CloneDo.Mvvm.ViewModels
 		{
 			task = taskItem;
 
-			this.SaveCommand = new Command ((temp) => {
+			this.SaveCommand = new Command (async (temp) => {
 //				App.Database.SaveTask(task);
-				App.Client.SaveTask(task);
-				Navigation.PopAsync();
+				bool success = await App.Client.SaveTask(task);
+				if (success) Navigation.PopAsync();
 
 				// Broadcast this message for other viewmodel
 				MessagingCenter.Send<TaskItemViewModel, TaskItem>(this, "TaskAdded", task);
@@ -24,8 +24,8 @@ namespace CloneDo.Mvvm.ViewModels
 
 			this.DeleteCommand = new Command (async (temp) => {
 //				App.Database.DeleteTask(task.ID);
-				await App.Client.DeleteTask(task.ID);
-				Navigation.PopAsync();
+				bool success = await App.Client.DeleteTask(task.ID);
+				if (success) Navigation.PopAsync();
 
 				MessagingCenter.Send<TaskItemViewModel, TaskItem>(this, "TaskDeleted", task);
 			});

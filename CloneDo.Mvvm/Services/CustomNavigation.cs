@@ -53,6 +53,16 @@ namespace CloneDo.Mvvm.Services
 			_page.Navigation.PushModalAsync (page);
 		}
 
+		/// <summary>
+		/// Displays an alert dialog.
+		/// </summary>
+		/// <param name="title">Title.</param>
+		/// <param name="message">Message.</param>
+		/// <param name="cancel">Cancel.</param>
+		public async void DisplayAlert(string title, string message, string cancel) {
+			_page.DisplayAlert(title, message, cancel);
+		}
+
 	}
 }
 

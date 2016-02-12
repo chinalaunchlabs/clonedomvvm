@@ -36,8 +36,7 @@ namespace CloneDo.Mvvm.Services
 			});
 			var response = await _restClient.Post<TodoResponse> ("tasks/", json);
 
-			// TODO: Maybe implement this somewhere else?
-			MessagingCenter.Send<TodoClient, TodoResponse> (this, "StatusMessage", response);
+			dispDialog (response);
 			return response.Ok;
 		}
 
@@ -49,14 +48,15 @@ namespace CloneDo.Mvvm.Services
 			string parameters = "tasks";
 			TodoResponse response = await _restClient.Get<TodoResponse>(parameters);
 
-			List<TaskItem> tasks;
-			if (response.Ok)
+			List<TaskItem> tasks = new List<TaskItem>();
+
+			if (response.Ok) {
 				tasks = JsonConvert.DeserializeObject<List<TaskItem>> (response.Body);
-			else {
-				// TODO: Maybe implement this somewhere else?
-				MessagingCenter.Send<TodoClient, TodoResponse> (this, "StatusMessage", response);
-				tasks = null;
 			}
+			else {
+				dispDialog (response);
+			} 
+
 			return tasks;
 		}
 
@@ -68,13 +68,11 @@ namespace CloneDo.Mvvm.Services
 			string parameters = string.Format ("tasks/{0}", id);
 			var response = await _restClient.Get<TodoResponse> (parameters);
 
-			TaskItem task;
+			TaskItem task = new TaskItem();
 			if (response.Ok)
 				task = JsonConvert.DeserializeObject<TaskItem> (response.Body);
 			else {
-				// TODO: Maybe implement this somewhere else?
-				MessagingCenter.Send<TodoClient, TodoResponse> (this, "StatusMessage", response);
-				task = null; 
+				dispDialog (response);
 			}
 			return task;
 		}
@@ -83,13 +81,15 @@ namespace CloneDo.Mvvm.Services
 		/// Creates or updates a task.
 		/// </summary>
 		/// <param name="task">Task.</param>
-		public void SaveTask(TaskItem task) {
+		public async Task<bool> SaveTask(TaskItem task) {
+			bool b;
 			if (task.ID == 0) {
-				NewTask (task);
+				b = await NewTask (task);
 			}
 			else {
-				UpdateTask (task);
+				b = await UpdateTask (task);
 			}
+			return b;
 		}
 
 		/// <summary>
@@ -100,10 +100,9 @@ namespace CloneDo.Mvvm.Services
 		public async Task<bool> DeleteTask(int id) {
 			string parameters = string.Format ("tasks/{0}", id);
 			var response = await _restClient.Delete<TodoResponse> (parameters);
-			if (!response.Ok) {
-				// TODO: Maybe implement this somewhere else?
-				MessagingCenter.Send<TodoClient, TodoResponse> (this, "StatusMessage", response);
-			}
+
+			dispDialog (response);
+
 			return response.Ok;
 		}
 
@@ -119,12 +118,24 @@ namespace CloneDo.Mvvm.Services
 			string parameters = string.Format ("tasks/{0}", task.ID);
 			var response = await _restClient.Put<TodoResponse> (parameters, json);
 
+			dispDialog (response);
+
+			return response.Ok;
+		}
+
+
+		private void dispDialog(TodoResponse response) {
 			if (!response.Ok) {
+				System.Diagnostics.Debug.WriteLine ("{0}: {1}", response.Ok?"Success":"Error", response.Message);
 				// TODO: Maybe implement this somewhere else?
 				MessagingCenter.Send<TodoClient, TodoResponse> (this, "StatusMessage", response);
 			}
+		}
 
-			return response.Ok;
+		private void dispErrDialog(string msg) {
+			System.Diagnostics.Debug.WriteLine ("WHY");
+			// TODO: Maybe implement this somewhere else?
+			MessagingCenter.Send<TodoClient, string> (this, "ErrMessage", msg);
 		}
 			
 	}
