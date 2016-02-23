@@ -5,52 +5,33 @@
 	<StackLayout Orientation="Horizontal">
 
 		<!--left: 40 - because the parent layout was moved -20px -->
-		<StackLayout.Padding>
-			40, 0, 30, 0
-		</StackLayout.Padding>
+		<StackLayout.Padding> 40, 0, 30, 0 </StackLayout.Padding>
 
 		<StackLayout HorizontalOptions="FillAndExpand">
 
-			<StackLayout.Spacing>
-				0
-			</StackLayout.Spacing>
-			<StackLayout.Padding>
-				0, 15, 0, 15
-			</StackLayout.Padding>
+			<StackLayout.Spacing> 0 </StackLayout.Spacing>
+			<StackLayout.Padding> 0, 15, 0, 15 </StackLayout.Padding>
 
 			<ContentView HorizontalOptions="FillAndExpand">
 				<ContentView.GestureRecognizers>
-					<TapGestureRecognizer NumberOfTapsRequired="1"
-										  Command="{Binding TaskEditCommand}" />
+					<TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding TaskEditCommand}" />
 				</ContentView.GestureRecognizers>
-				<Label  HorizontalOptions="StartAndExpand"
-						Text="{Binding TaskName}"
-						FontAttributes="Bold"
-						FontSize="Large"
-						TextColor="{Binding TaskNameColor}" />
+				<Label  HorizontalOptions="StartAndExpand" Text="{Binding TaskName}" FontAttributes="Bold" FontSize="Large" TextColor="{Binding TaskNameColor}" />
 			</ContentView>
 
 			<ContentView HorizontalOptions="FillAndExpand">
 				<ContentView.GestureRecognizers>
-					<TapGestureRecognizer NumberOfTapsRequired="1"
-										  Command="{Binding TaskEditCommand}" />
+					<TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding TaskEditCommand}" />
 				</ContentView.GestureRecognizers>
 				<Label Text="{Binding DueDate}" />
 			</ContentView>
 
 		</StackLayout>
 
-		<Image  Source="checkbox_32.png"
-				Aspect="AspectFit"
-				HorizontalOptions="End"
-				Opacity="{Binding CheckOpacity}"
-				IsVisible="true">
-
-				<Image.GestureRecognizers>
-					<TapGestureRecognizer NumberOfTapsRequired="1"
-										  Command="{Binding SetDoneCommand}" />
-				</Image.GestureRecognizers>
-
+		<Image  Source="checkbox_32.png" Aspect="AspectFit" HorizontalOptions="End" Opacity="{Binding CheckOpacity}" IsVisible="true">
+			<Image.GestureRecognizers>
+				<TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding SetDoneCommand}" />
+			</Image.GestureRecognizers>
 		</Image>
 
 	</StackLayout>

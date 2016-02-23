@@ -54,7 +54,8 @@ namespace CloneDo.Mvvm.ViewModels
 			MessagingCenter.Subscribe<TodoClient, TodoResponse> (this, "StatusMessage", (sender, response) => {
 				System.Diagnostics.Debug.WriteLine("TodoListViewModel::Status dialog here");
 				Navigation.DisplayAlert(response.Ok?"Success":"Error", response.Message, "Ok");
-				Navigation.PopAsync(); 
+				Navigation.PopToRootAsync();
+				
 			});
 
 			MessagingCenter.Subscribe<TodoClient, string> (this, "ErrMessage", (sender, message) => {
